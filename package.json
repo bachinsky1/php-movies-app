@@ -1,0 +1,14 @@
+{
+    "name": "php-movie-app",
+    "version": "1.0.0",
+    "description": "Movie application",
+    "scripts": {
+        "build:css": "postcss app/resources/sass/main.scss -o public/css/styles.css"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.17",
+        "postcss": "^8.4.33",
+        "postcss-cli": "^11.0.0",
+        "tailwindcss": "^3.4.1"
+    }
+}
