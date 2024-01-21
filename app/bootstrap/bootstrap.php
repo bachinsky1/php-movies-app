@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 }
+
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -16,18 +17,22 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
 use App\Middleware\AuthMiddleware;
 use App\Services\ViteService;
+use Dotenv\Dotenv;
 
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+$dotenv->load();
+// var_dump($_ENV); 
 // Setting up Eloquent
 $capsule = new Capsule;
 $capsule->addConnection([
-    'driver'    => $_ENV['DB_CONNECTION'],
-    'host'      => $_ENV['DB_HOST'],
-    'database'  => $_ENV['DB_DATABASE'],
-    'username'  => $_ENV['DB_USERNAME'],
-    'password'  => $_ENV['DB_PASSWORD'],
-    'charset'   => $_ENV['DB_CHARSET'],
-    'collation' => $_ENV['DB_COLLATION'],
-    'prefix'    => $_ENV['DB_PREFIX'],
+    'driver' => getenv('DB_CONNECTION') ?: 'mysql',
+    'host' => getenv('DB_HOST') ?: 'db',
+    'database' => getenv('DB_DATABASE') ?: 'movies_db',
+    'username' => getenv('DB_USERNAME') ?: 'root',
+    'password' => getenv('DB_PASSWORD') ?: 'root',
+    'charset' => getenv('DB_CHARSET') ?: 'utf8',
+    'collation' => getenv('DB_COLLATION') ?: 'utf8_unicode_ci',
+    'prefix' => getenv('DB_PREFIX') ?: '',
 ]);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
@@ -39,11 +44,13 @@ $router = new Router($events, $container);
 
 // Defining controllers
 define('CONTROLLER_NAMESPACE', 'App\\Controllers\\');
-function controller($className) {
+function controller($className)
+{
     return CONTROLLER_NAMESPACE . $className;
 }
 
-function app($make = null) {
+function app($make = null)
+{
     global $container;
     if (!is_null($make)) {
         return $container->make($make);
