@@ -12,7 +12,7 @@ class AuthMiddleware
         $authorized = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
         $currentPath = $request->path();
         // var_dump($authorized);
-        if (!$authorized && !in_array($currentPath, [])) {
+        if (!$authorized && !in_array($currentPath, ['login'])) {
             // The user is not authorized, send him to the login page
             return new Response('Unauthorized', 302, ['Location' => '/login']);
         }

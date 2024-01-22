@@ -46,6 +46,7 @@ class HomeController extends BaseController
     {
         $this->view('login');
     }
+
     public function getMovieInfo($movieId)
     {
         $movie = Movie::with('actors')->findOrFail($movieId);
@@ -110,7 +111,6 @@ class HomeController extends BaseController
 
         header('Location: /');
     }
-
 
     public function authenticate()
     {
@@ -212,7 +212,6 @@ class HomeController extends BaseController
     {
         return htmlspecialchars(strip_tags(trim($input)));
     }
-
 
     public function logout()
     {
