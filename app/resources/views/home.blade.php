@@ -130,7 +130,6 @@
         <!-- Info about film -->
         <div id="movieInfoModal" class="modal hidden fixed z-10 inset-0 overflow-y-auto">
             <div class="modal-content p-5 bg-white mx-auto my-20 max-w-lg rounded shadow-lg">
-                <span class="close absolute top-0 right-0 cursor-pointer" onclick="closeModal('movieInfoModal')">&times;</span>
                 <div id="movieInfoContent">
                     
                 </div>
