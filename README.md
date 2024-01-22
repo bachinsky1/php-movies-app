@@ -24,10 +24,10 @@
 Проект реалізовано на PHP без використання фреймворків. Використовувалась база даних MySQL. Також використовувалися такі пакети:
 
 - `vlucas/phpdotenv`: для завантаження змінних оточення з файлу `.env`.
-- `nikic/fast-route`: для маршрутизації.
+- `illuminate/routing`: для маршрутизації.
 - `jenssegers/blade`: для шаблонізації.
-- `illuminate/database`, `illuminate/events`: для роботи з базою даних.
-- `middlewares/utils`, `illuminate/routing`, `illuminate/pipeline`: для роботи з middleware.
+- `illuminate/database`: для роботи з базою даних.
+- `middlewares/utils`, `illuminate/pipeline`: для роботи з middleware.
 - `nyholm/psr7`: для реалізації PSR-7.
 - `autoprefixer`, `postcss`, `postcss-cli`, `tailwindcss`: для роботи з CSS.
 
