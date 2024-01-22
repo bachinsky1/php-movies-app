@@ -5,7 +5,7 @@ services:
     build: .
     container_name: php-app
     volumes:
-      - .:/var/wwwx
+      - .:/var/www
       - /var/www/node_modules
       - /var/www/vendor
     depends_on:

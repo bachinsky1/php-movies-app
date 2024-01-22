@@ -26,6 +26,10 @@
             <!-- Main content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                 <div class="mx-auto px-6 py-8">
+                    <div id="errorContainer" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 w-full" role="alert">
+                        <strong class="font-bold">Error! </strong>
+                        <span id="errorList" class="block sm:inline"></span>
+                    </div>
                     <div class="flex justify-between items-center mb-8">
                         <h1 class="text-4xl font-semibold">Movies list</h1>
                         <div>
@@ -85,7 +89,7 @@
                     </div>
                     <div>
                         <label for="release_year" class="block">Year:</label>
-                        <input type="number" id="release_year" min="1800" name="release_year" class="w-full p-2 border rounded" required>
+                        <input type="number" id="release_year" min="1899" name="release_year" class="w-full p-2 border rounded" required>
                     </div>
                     <div>
                         <label for="format" class="block">Format:</label>
@@ -109,7 +113,7 @@
                 <h2 class="text-xl mb-4">Search film by name</h2>
                 <form action="/search-by-title" method="POST" class="space-y-4">
                     <div>
-                        <input type="text" name="title" placeholder="Введите название фильма" class="w-full p-2 border rounded">
+                        <input type="text" name="title" placeholder="Movie name" class="w-full p-2 border rounded">
                     </div>
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
                 </form>
@@ -121,7 +125,7 @@
                 <h2 class="text-xl mb-4">Search film by actor</h2>
                 <form action="/search-by-actor" method="POST" class="space-y-4">
                     <div>
-                        <input type="text" name="actor" placeholder="Введите имя актёра" class="w-full p-2 border rounded">
+                        <input type="text" name="actor" placeholder="Actor name" class="w-full p-2 border rounded">
                     </div>
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
                 </form>

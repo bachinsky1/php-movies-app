@@ -1,4 +1,32 @@
 const modal = document.getElementById("movieInfoModal");
+const errorContainer = document.getElementById("errorContainer");
+const errorList = document.getElementById("errorList");
+
+const showError = (message) => {
+    errorList.innerText = `${message}`;
+    errorContainer.classList.remove('hidden');
+};
+
+const clearError = () => {
+    errorContainer.classList.add('hidden');
+    errorList.innerText = '';
+};
+
+const checkForErrorInURL = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    if (error) {
+        showError(error);
+        urlParams.delete('error');
+        const newUrl = urlParams.toString() ? `${window.location.pathname}?${urlParams}` : window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+    }
+};
+
+
+window.addEventListener("DOMContentLoaded", (event) => {
+    checkForErrorInURL();
+});
 
 window.onclick = (event) => {
     if (event.target == modal) {
