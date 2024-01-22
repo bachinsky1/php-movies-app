@@ -49,7 +49,7 @@
 ## Встановлення та запуск
 1. Клонуйте репозиторій: `git clone https://github.com/bachinsky1/php-movies-app`
 2. Перейдіть до директорії проекту: `cd php-movies-app`
-3. Встановіть необхідні бібліотеки `composer install`, `npm install`.
+3. Встановіть необхідні бібліотеки `composer install`, `npm install`  (Не обов'язково).
 4. Запустіть додаток за допомогою Docker: `docker-compose up -d`
 5. Перейдіть на `http://localhost` у вашому веб-браузері, щоб відкрити веб-інтерфейс програми.
 
