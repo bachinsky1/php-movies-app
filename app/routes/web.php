@@ -12,9 +12,9 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) {
     $router->post('/delete-movie/{id}', [HomeController::class, 'deleteMovie']);
     $router->get('/movie-info/{id}', [HomeController::class, 'getMovieInfo']);
     $router->post('/add-movie', [HomeController::class, 'addMovie']);
+    $router->post('/login', [HomeController::class, 'authenticate']);
 });
 
 $router->get('/login', [HomeController::class, 'login']);
-$router->post('/login', [HomeController::class, 'authenticate']);
 $router->get('/logout', [HomeController::class, 'logout']);
 
