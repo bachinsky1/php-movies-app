@@ -27,7 +27,7 @@
 - `illuminate/routing`: для маршрутизації.
 - `jenssegers/blade`: для шаблонізації.
 - `illuminate/database`, `illuminate/events`: для роботи з базою даних.
-- `middlewares/utils`, `illuminate/routing`, `illuminate/pipeline`: для роботи з middleware.
+- `middlewares/utils`, `illuminate/pipeline`: для роботи з middleware.
 - `nyholm/psr7`: для реалізації PSR-7.
 - `autoprefixer`, `postcss`, `postcss-cli`, `tailwindcss`: для роботи з CSS.
 
