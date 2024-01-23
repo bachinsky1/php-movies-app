@@ -22,7 +22,7 @@ RUN npm init -y \
     && ls -la
 
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www
+    && chmod -R 777 /var/www
 
 EXPOSE 80
 
