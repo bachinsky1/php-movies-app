@@ -66,8 +66,20 @@ const closeModal = (modalId) => {
     modal.style.display = "none";
 };
 
+
+
 window.addEventListener("click", (event) => {
     if (event.target.classList.contains("modal")) {
         event.target.style.display = "none";
     }
 });
+
+document.querySelector("#sortAZForm").addEventListener("click", () => {
+    window.location.href = "/sort/a-z";
+});
+
+document.querySelector("#sortZAForm").addEventListener("click", () => {
+    window.location.href = "/sort/z-a";
+});
+
+

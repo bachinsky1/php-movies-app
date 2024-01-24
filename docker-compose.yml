@@ -25,6 +25,7 @@ services:
       - ./database/movies_db.sql:/docker-entrypoint-initdb.d/movies_db.sql
     networks:
       - app-network
+    
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -51,6 +52,17 @@ services:
       - .:/var/www
     depends_on:
       - app
+    networks:
+      - app-network
+
+  init-db:
+    build:
+      context: .
+      dockerfile: Dockerfile.init-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
     networks:
       - app-network
 

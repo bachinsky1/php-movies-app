@@ -6,6 +6,7 @@ use App\Middleware\AuthMiddleware;
 
 $router->group(['middleware' => AuthMiddleware::class], function ($router) {
     $router->get('/', [HomeController::class, 'index']);
+    $router->get('/sort/{sort}', [HomeController::class, 'index']);
     $router->post('/import-movies', [HomeController::class, 'importMovies']);
     $router->post('/search-by-title', [HomeController::class, 'searchByTitle']);
     $router->post('/search-by-actor', [HomeController::class, 'searchByActor']);

@@ -7,22 +7,26 @@ use App\Models\Actor;
 
 class HomeController extends BaseController
 {
-    
-    public function index()
+
+    public function index($sort = null)
     {
-        setlocale(LC_COLLATE, 'uk_UA.utf8');
-    
         $movies = Movie::all();
-    
         $moviesArray = $movies->toArray();
-    
-        usort($moviesArray, function ($a, $b) {
-            return strcoll($a['title'], $b['title']);
-        });
-    
+        $collator = new \Collator('uk_UA');
+
+        if ($sort === 'z-a') {
+            usort($moviesArray, function ($a, $b) use ($collator) {
+                return $collator->compare($b['title'], $a['title']); // Sorting Z-A
+            });
+        } else {
+            usort($moviesArray, function ($a, $b) use ($collator) {
+                return $collator->compare($a['title'], $b['title']); // Sort A-Z (or default)
+            });
+        }
+
         $this->view('home', ['movies' => $moviesArray]);
     }
-    
+
     public function searchByTitle()
     {
         $title = $this->sanitize($_POST['title']) ?? '';
@@ -33,21 +37,31 @@ class HomeController extends BaseController
     public function searchByActor()
     {
         $actorName = $this->sanitize($_POST['actor']) ?? '';
-        [$firstName, $lastName] = explode(' ', $actorName, 2) + [null, null];
-
-        $actors = Actor::with('movies')->where('first_name', 'like', "%{$firstName}%")
-            ->where('last_name', 'like', "%{$lastName}%")
-            ->get();
-
-        $movies = [];
-        foreach ($actors as $actor) {
-            $movies = array_merge($movies, $actor->movies->toArray());
+        [$firstName, $lastName] = array_pad(explode(' ', $actorName, 2), 2, null);
+    
+        if (!$lastName) {
+            $actors = Actor::with('movies')
+                ->where(function($query) use ($firstName) {
+                    $query->where('first_name', 'like', "%{$firstName}%")
+                          ->orWhere('last_name', 'like', "%{$firstName}%");
+                })
+                ->get();
+        } else {
+            $actors = Actor::with('movies')
+                ->where(function($query) use ($firstName, $lastName) {
+                    $query->where('first_name', 'like', "%{$firstName}%")
+                          ->where('last_name', 'like', "%{$lastName}%");
+                })
+                ->get();
         }
-
-
+    
+        $movies = $actors->flatMap(function ($actor) {
+            return $actor->movies;
+        })->unique('id')->values()->all();
+    
         $this->view('home', ['movies' => $movies]);
     }
-
+    
     public function login()
     {
         $this->view('login');
@@ -109,43 +123,43 @@ class HomeController extends BaseController
         $releaseYear = intval($_POST['release_year']);
         $format = $this->sanitize($_POST['format']);
         $stars = array_map('trim', explode(',', $_POST['stars']));
-    
+
         // Checking the validity of the movie title
         if (!$this->isValidTitle($title)) {
             header('Location: /?error=invalid_title');
             return;
         }
-    
+
         // Checking the validity of the year of release
         if (!$this->isValidReleaseYear($releaseYear)) {
             header('Location: /?error=invalid_release_year');
             return;
         }
-    
+
         // Checking for the existence of a film
         if ($this->isMovieExists($title)) {
             header('Location: /?error=movie_exists');
             return;
         }
-    
+
         // Actor processing
         foreach ($stars as $starName) {
             [$firstName, $lastName] = explode(' ', $starName, 2) + [null, null];
-    
+
             // If the actor's first or last name has not been validated, we abort execution
             if (!$this->isValidActorName($firstName) || ($lastName && !$this->isValidActorName($lastName))) {
                 header('Location: /?error=invalid_actor_name');
                 return;
             }
         }
-    
+
         // Making a new film
         $movie = Movie::create([
             'title' => $title,
             'release_year' => $releaseYear,
             'format' => $format,
         ]);
-    
+
         // The process of associating a film with actors
         foreach ($stars as $starName) {
             [$firstName, $lastName] = explode(' ', $starName, 2) + [null, null];
@@ -156,10 +170,10 @@ class HomeController extends BaseController
             // Linking the film and the actor
             $movie->actors()->syncWithoutDetaching($actor->id);
         }
-    
+
         header('Location: /');
     }
-    
+
     public function importMovies()
     {
         // Checking for an uploaded file
@@ -167,28 +181,30 @@ class HomeController extends BaseController
             header('Location: /?error=no_file_uploaded');
             exit;
         }
-    
+
         $file = $_FILES['movies_file'];
         $validationError = $this->validateMovieFile($file);
         if ($validationError) {
             header("Location: /?error=$validationError");
             exit;
         }
-    
+
         // Reading the contents of a file
         $content = file_get_contents($_FILES['movies_file']['tmp_name']);
-    
+
         // Processing of each film
         $movies = $this->parseMovies($content);
-    
-        foreach ($movies as $movieData) { 
+
+        foreach ($movies as $movieData) {
             $releaseYear = intval($movieData['release_year']);
-            if (!$this->isValidTitle($movieData['title'])
+            if (
+                !$this->isValidTitle($movieData['title'])
                 || !$this->isValidReleaseYear($releaseYear)
-                || $this->isMovieExists($movieData['title'])) {
+                || $this->isMovieExists($movieData['title'])
+            ) {
                 continue; // Skip a movie if the release year is not valid, the movie already exists, or the title is empty
             }
-    
+
             // Actor Name Validation
             foreach ($movieData['stars'] as $starName) {
                 [$firstName, $lastName] = explode(' ', $starName, 2) + [null, null];
@@ -197,14 +213,14 @@ class HomeController extends BaseController
                     continue 2; // Skip the current movie completely if the actor's name is not validated
                 }
             }
-    
+
             // Creating a new movie if all actor names are validated
             $movie = Movie::create([
                 'title' => $movieData['title'],
                 'release_year' => intval($movieData['release_year']),
                 'format' => $movieData['format']
             ]);
-    
+
             // The process of associating a film with actors
             foreach ($movieData['stars'] as $starName) {
                 [$firstName, $lastName] = explode(' ', $starName, 2) + [null, null];
@@ -215,7 +231,7 @@ class HomeController extends BaseController
                 $movie->actors()->syncWithoutDetaching($actor->id);
             }
         }
-    
+
         header('Location: /');
     }
 
@@ -227,7 +243,7 @@ class HomeController extends BaseController
         }
         return preg_match('/^[a-zA-Zа-яА-ЯіІїЇєЄґҐьЬ’\-\s]+$/u', $trimmedName);
     }
-    
+
     private function validateMovieFile($file)
     {
         // Check for file format (must be .txt)

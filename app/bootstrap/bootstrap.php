@@ -7,6 +7,8 @@ if (session_status() === PHP_SESSION_NONE) {
     }
 }
 
+// setlocale(LC_COLLATE, 'uk_UA.utf8');
+
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -30,8 +32,8 @@ $capsule->addConnection([
     'database' => getenv('DB_DATABASE') ?: 'movies_db',
     'username' => getenv('DB_USERNAME') ?: 'root',
     'password' => getenv('DB_PASSWORD') ?: 'root',
-    'charset' => getenv('DB_CHARSET') ?: 'utf8',
-    'collation' => getenv('DB_COLLATION') ?: 'utf8_unicode_ci',
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_0900_ai_ci',
     'prefix' => getenv('DB_PREFIX') ?: '',
 ]);
 $capsule->setAsGlobal();

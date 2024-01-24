@@ -13,7 +13,7 @@
         <!-- Sidebar -->
         <div class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
             <nav>
-                <a href="/" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">Movies list</a>
+                <a href="/" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">Home page</a>
             </nav>
         </div>
         <!-- Content -->
@@ -32,7 +32,15 @@
                     </div>
                     <div class="flex justify-between items-center mb-8">
                         <h1 class="text-4xl font-semibold">Movies list</h1>
-                        <div>
+                        <div class="flex space-x-2">
+                        <form id="sortAZForm" method="GET">
+                            <input type="hidden" name="sort" value="a-z">
+                            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Sort A-Z</button>
+                        </form>
+                        <form id="sortZAForm" method="GET">
+                            <input type="hidden" name="sort" value="z-a">
+                            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Sort Z-A</button>
+                        </form>
                             <button onclick="showModal('importMoviesModal')" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Importing movies</button>
                             <button onclick="showModal('addMovieModal')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Add a movie</button>
                             <button onclick="showModal('searchMovieModal')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Search by name</button>
@@ -50,10 +58,7 @@
                                     <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"></th>
                                 </tr>
                             </thead>
-                            <tbody> 
-                                @foreach ($movies as $movie) 
-
-                                <tr class="hover:bg-grey-lighter">
+                            <tbody> @foreach ($movies as $movie) <tr class="hover:bg-grey-lighter">
                                     <td class="py-4 px-6 border-b border-grey-light">{{ $movie['id'] }}</td>
                                     <td class="py-4 px-6 border-b border-grey-light">{{ $movie['title'] }}</td>
                                     <td class="py-4 px-6 border-b border-grey-light">{{ $movie['release_year'] }}</td>
@@ -64,10 +69,7 @@
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
                                         </form>
                                     </td>
-                                </tr> 
-
-                                @endforeach 
-                            </tbody>
+                                </tr> @endforeach </tbody>
                         </table>
                     </div>
                 </div>
@@ -135,7 +137,6 @@
         <div id="movieInfoModal" class="modal hidden fixed z-10 inset-0 overflow-y-auto">
             <div class="modal-content p-5 bg-white mx-auto my-20 max-w-lg rounded shadow-lg">
                 <div id="movieInfoContent">
-                    
                 </div>
             </div>
         </div>
