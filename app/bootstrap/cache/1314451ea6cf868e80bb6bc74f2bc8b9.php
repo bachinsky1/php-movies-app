@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home</title>
-        <link href="/css/styles.css" rel="stylesheet">
-        <link href="/css/css.css" rel="stylesheet">
+        <link href="/css/styles.css?x=1" rel="stylesheet">
+        <link href="/css/css.css?x=1" rel="stylesheet">
     </head>
 
     <body class="flex h-screen bg-gray-100">
@@ -152,7 +152,7 @@
                 </form>
             </div>
         </div>
-        <script src="/js/main.js"></script>
+        <script src="/js/main.js?x=1"></script>
     </body>
 
 </html><?php /**PATH /var/www/app/resources/views/home.blade.php ENDPATH**/ ?>
